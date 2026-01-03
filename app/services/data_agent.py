@@ -60,6 +60,15 @@ class DataAgent:
             "block_number": block_number,
         }
 
+
+    def _local_embed(self, text: str) -> List[float]:
+        digest = hashlib.sha256(text.encode("utf-8")).digest()
+        seed = int.from_bytes(digest[:8], "big")
+        rng = np.random.default_rng(seed)
+        vec = rng.normal(0, 1, VECTOR_DIM).astype("float32")
+        norm = np.linalg.norm(vec) or 1.0
+        return (vec / norm).tolist()
+
     def embed(self, text: str) -> List[float]:
         if EMBED_PROVIDER == "openai":
             if not EMBED_API_KEY:
@@ -81,21 +90,19 @@ class DataAgent:
             return embedding
         if EMBED_PROVIDER == "ollama":
             payload = {"model": EMBED_MODEL, "prompt": text}
-            response = httpx.post(f"{OLLAMA_BASE}/api/embeddings", json=payload, timeout=30)
-            response.raise_for_status()
-            embedding = response.json()["embedding"]
-            if len(embedding) != VECTOR_DIM:
-                raise RuntimeError(
-                    f"Embedding dimension {len(embedding)} does not match VECTOR_DIM={VECTOR_DIM}"
-                )
-            return embedding
+            try:
+                response = httpx.post(f"{OLLAMA_BASE}/api/embeddings", json=payload, timeout=30)
+                response.raise_for_status()
+                embedding = response.json()["embedding"]
+                if len(embedding) != VECTOR_DIM:
+                    raise RuntimeError(
+                        f"Embedding dimension {len(embedding)} does not match VECTOR_DIM={VECTOR_DIM}"
+                    )
+                return embedding
+            except httpx.HTTPError:
+                return self._local_embed(text)
 
-        digest = hashlib.sha256(text.encode("utf-8")).digest()
-        seed = int.from_bytes(digest[:8], "big")
-        rng = np.random.default_rng(seed)
-        vec = rng.normal(0, 1, VECTOR_DIM).astype("float32")
-        norm = np.linalg.norm(vec) or 1.0
-        return (vec / norm).tolist()
+        return self._local_embed(text)
 
     def ingest(
         self,
