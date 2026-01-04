@@ -5,9 +5,9 @@ BNB Hack main track submission for the AI track (DeFi category). This project bu
 ## Submission snapshot
 - **Main track**: AI
 - **Category**: DeFi
-- **Technical solution**: BSC (configurable RPC for testnet or mainnet)
+- **Technical solution**: BSC mainnet (live; RPC configurable)
 - **Environment config**: `.env.development` (no secrets)
-- **Smart contracts**: `chain/contracts/DecisionLog.sol` deployed on BSC mainnet at `0x74B9CFd32552630B0bfEF0976Fc1d8198f830242`
+- **Smart contracts**: `chain/contracts/DecisionLog.sol` deployed and verified on BSC mainnet at `https://bscscan.com/address/0x74B9CFd32552630B0bfEF0976Fc1d8198f830242`
 - **Status**: Live on BSC mainnet (2026-01-01)
 
 ## Project details
@@ -55,16 +55,16 @@ Postgres + pgvector   BNB RPC (optional live exec)
    ```
 4. (Optional) Enable live execution on BSC by setting `RPC_URL`, `PRIVATE_KEY`, `EXECUTE_LIVE=true`, and `POLICY_MODE=execute_enabled`.
 
-## On-chain deployment (BSC testnet or mainnet)
+## On-chain deployment (BSC mainnet; testnet optional)
 1. Install node deps (once): `npm install`
-2. Create `.env.hardhat` from `.env.hardhat.example` and set `DEPLOYER_PRIVATE_KEY` plus `BSC_TESTNET_RPC_URL` or `BSC_MAINNET_RPC_URL`.
+2. Create `.env.hardhat` from `.env.hardhat.example` and set `DEPLOYER_PRIVATE_KEY` and `BSC_MAINNET_RPC_URL` (testnet optional: `BSC_TESTNET_RPC_URL`).
 3. Compile: `npx hardhat compile`
-4. Deploy (testnet): `npx hardhat run chain/scripts/deploy.js --network bscTestnet`
-5. Deploy (mainnet): `npx hardhat run chain/scripts/deploy.js --network bscMainnet`
-6. Log two transactions (required by submission):  
-   `CONTRACT_ADDRESS=<DEPLOYED_CONTRACT> npx hardhat run chain/scripts/log-twice.js --network <bscTestnet|bscMainnet>`
-7. (Optional) Verify contract on BscScan:  
-   `BSCSCAN_API_KEY=<API_KEY> npx hardhat verify --network <bscTestnet|bscMainnet> <DEPLOYED_CONTRACT>`
+4. Deploy (mainnet): `npx hardhat run chain/scripts/deploy.js --network bscMainnet`
+5. Deploy (testnet, optional): `npx hardhat run chain/scripts/deploy.js --network bscTestnet`
+6. Log two transactions (required by submission on mainnet):  
+   `CONTRACT_ADDRESS=<DEPLOYED_CONTRACT> npx hardhat run chain/scripts/log-twice.js --network bscMainnet`
+7. (Optional) Verify contract on BscScan (mainnet):  
+   `BSCSCAN_API_KEY=<API_KEY> npx hardhat verify --network bscMainnet <DEPLOYED_CONTRACT>`
 
 ## BNB Hack alignment
 
@@ -146,6 +146,9 @@ Run the full demo (ingest → insights → search → advise → execute → sco
 ```bash
 ./scripts/demo.sh
 ```
+
+## Operations manual
+See `docs/operations-manual.md` for a step-by-step demo checklist.
 
 ## Sample requests
 
