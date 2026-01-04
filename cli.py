@@ -81,8 +81,10 @@ def main() -> None:
                 "/data/ingest",
                 {"tx_hash": "0xdemo001", "payload": "nft mint volume rising on bnb", "chain": "bnb"},
             )
+            print()
             print("Step 2: data insights")
             _request("GET", base_url, "/data/insights")
+            print()
             print("Step 3: search similar events")
             _request(
                 "POST",
@@ -90,6 +92,7 @@ def main() -> None:
                 "/data/search",
                 {"query": "nft volume trend", "top_k": 3},
             )
+            print()
             print("Step 4: advisor recommendation")
             _request(
                 "POST",
@@ -100,6 +103,7 @@ def main() -> None:
                     "objective": "balanced growth",
                 },
             )
+            print()
             print("Step 5: execution plan (dry run)")
             _request(
                 "POST",
@@ -107,6 +111,7 @@ def main() -> None:
                 "/execute/plan",
                 {"asset": "BNB", "action": "swap", "size": 5.0, "strategy_id": "demo-strat"},
             )
+            print()
             print("Step 6: scorecard")
             _request("GET", base_url, "/scorecard")
             return
