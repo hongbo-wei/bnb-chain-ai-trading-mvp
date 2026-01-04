@@ -1,37 +1,84 @@
-# BNB Chain AI Trading MVP Whitepaper
+---
+title: "BNB Chain AI Trading MVP"
+subtitle: "Whitepaper"
+author: "Hongbo Wei"
+date: "2026-01-01"
+---
 
-## Problem
-On-chain markets move quickly, but most traders and protocols lack a safe, explainable, and policy-aware system that can turn raw on-chain data into actionable decisions. Existing tools are fragmented (data dashboards, signal bots, execution scripts) and do not provide end-to-end risk controls or auditable decision routing.
+# Abstract
+BNB Chain AI Trading MVP is an agentic system that turns on-chain signals into safe, explainable trade intent. It combines semantic search over blockchain data, risk-aware advice generation, and policy-gated execution planning. The system is designed for transparency, auditability, and rapid iteration on BNB Chain.
 
-## Solution
-BNB Chain AI Trading MVP provides an agentic system with three specialized agents and a policy-gated orchestrator:
-- **Data Agent** collects and embeds on-chain events for semantic search and trend detection.
-- **Advisor Agent** transforms signals into risk-aware recommendations with allocations and confidence.
-- **Execution Agent** produces deterministic, gas-aware execution plans with safety checks.
+# Problem
+On-chain markets move quickly, but most traders and teams rely on fragmented tooling: data dashboards, signal bots, and manual execution scripts. These tools are rarely connected to a consistent risk policy or an auditable decision trail. The result is poor transparency, low trust, and limited automation at scale.
 
-The result is a transparent pipeline from signal ingestion to decision output, with optional on-chain execution.
+# Solution
+BNB Chain AI Trading MVP delivers an end-to-end pipeline built around three specialized agents and an orchestration layer:
+- Data Agent for ingesting and embedding on-chain signals
+- Advisor Agent for generating risk-aware recommendations
+- Execution Agent for deterministic, safety-checked execution planning
+- MCP Orchestrator for policy enforcement and decision logging
 
-## Design Architecture
-- **FastAPI API** exposes ingestion, search, insights, advisory, execution, and scoring endpoints.
-- **MCP Orchestrator** routes requests, enforces policy (gas, slippage, allowed assets/actions), and logs decisions.
-- **Postgres + pgvector** store on-chain events and embeddings for similarity search.
-- **BNB RPC** enables optional live execution through existing token/DEX contracts.
+# System Architecture
+- API: FastAPI endpoints for ingestion, search, insights, advice, execution, and scoring
+- Orchestrator: MCP-style routing with explicit policy gates
+- Storage: Postgres + pgvector for events, embeddings, and decision logs
+- On-chain integration: optional RPC execution on BNB Chain
 
-## Innovation
-- End-to-end, policy-gated AI trading flow from data to execution.
-- Deterministic execution planning with explicit safety gates (no opaque auto-trading).
-- Embedding-driven on-chain signal search with measurable query timing.
-- Audit-friendly MCP decision logging for traceability.
+# Core Components
+## Data Agent
+- Ingests on-chain events (BscScan or Bitquery)
+- Extracts metadata and tags
+- Creates embeddings for semantic search
 
-## Market Potential
-- **Retail and pro traders** who want explainable, risk-aware AI trading guidance.
-- **Wallets and frontends** that need safe trade intent generation and compliance controls.
-- **Protocols and funds** seeking an audit-friendly automation layer for strategy execution.
+## Advisor Agent
+- Accepts risk profile and objective
+- Returns recommendation, allocation mix, confidence, and rationale
+- Supports personalization from user trades and holdings
 
-## Competitive Advantage
-- Tight integration with BNB Chain data sources.
-- Clear separation of data, advisory, and execution responsibilities.
-- Lightweight deployment with minimal infrastructure requirements.
+## Execution Agent
+- Generates a deterministic execution plan
+- Enforces gas, slippage, and position size constraints
+- Runs in dry-run mode by default
 
-## Roadmap Summary
-See `docs/roadmap-6-month.md` for the six-month plan and milestone details.
+## MCP Orchestrator
+- Routes requests by intent
+- Applies policy gates
+- Stores decision logs for auditability
+
+# Workflow
+1. Ingest on-chain data
+2. Generate insights and semantic search results
+3. Produce a risk-aware recommendation
+4. Build a policy-compliant execution plan
+5. Score readiness across data, advisor, and execution
+
+# Security and Policy Controls
+- Policy modes: read_only, paper_trade, execute_enabled
+- Asset and action allowlists
+- Max gas, max position size, and slippage bounds
+- Decision logging for traceability
+
+# On-Chain Deployment
+The DecisionLog contract is deployed and verified on BSC mainnet:
+- Contract: https://bscscan.com/address/0x74B9CFd32552630B0bfEF0976Fc1d8198f830242
+- Source: `chain/contracts/DecisionLog.sol`
+
+# Evaluation and Metrics
+A built-in scorecard measures readiness across:
+- Data ingestion and query performance
+- Recommendation quality and confidence
+- Execution safety and policy compliance
+
+# Market and Use Cases
+- Wallets and frontends that need explainable trade intent
+- Traders seeking risk-aware decision support
+- Protocols and funds requiring audited automation flows
+
+# Roadmap
+See `docs/roadmap-6-month.md` for detailed milestones and delivery plan.
+
+# Open Source
+Repository: https://github.com/hongbo-wei/bnb-chain-ai-trading-mvp
+
+# Disclaimer
+This project is for research and demonstration only and does not provide financial advice.
