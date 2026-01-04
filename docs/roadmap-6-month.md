@@ -1,7 +1,7 @@
 # Six-Month Plan (BNB Hack)
 
-## Month 1: Testnet readiness
-- Finalize BSC testnet deployment playbook and CI checks
+## Month 1: Mainnet hardening
+- Validate BSC mainnet deployment playbook and CI checks
 - Add deterministic backtesting harness for advisor outputs
 - Expand data ingestion templates for top BNB Chain protocols
 
